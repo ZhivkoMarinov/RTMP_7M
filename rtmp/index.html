@@ -1,46 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-      #video-container {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 20px; /* Adds space between video elements */
-          position: relative;
-      }
-      .video-wrapper {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          position: relative;
-          padding-top: 30px; /* Adjust padding to make room for the label */
-      }
-      video {
-          border: 1px solid #ccc;
-          box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-          padding: 10px;
-          background-color: #f9f9f9;
-      }
-      .video-label {
-          font-size: 16px;
-          font-weight: bold;
-          position: absolute;
-          top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          background-color: rgba(255, 255, 255, 0.8); /* Optional: background color for better readability */
-          padding: 2px 5px;
-      }
-  </style>
+        #video-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            /* Adds space between video elements */
+        }
+
+        .video-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            padding-top: 30px;
+            /* Adjust padding to make room for the label */
+            flex-basis: calc(33.33% - 20px);
+            /* Adjust width to fit 3 per row */
+            box-sizing: border-box;
+        }
+
+        video {
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .video-label {
+            font-size: 16px;
+            font-weight: bold;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Optional: background color for better readability */
+            padding: 2px 5px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
     <title>Live Stream</title>
-  </head>
-  <body>
+</head>
+
+<body>
     <h2>RTMP_7M</h2>
     <div id="video-container"></div>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="stream_selector.js"></script>
+    <script>
+        const stream_names = [
+            'vivo_bac_1',
+            'vivo_bac_2',
+            'vivo_ru',
+            'india_tpfo',
+            'india_tp',
+            'india_ab',
+            '1x_tr_bj',
+            '1x_en_bj',
+            '1x_ru_bj',
+            '1x_tr_ru',
+            '1x_td',
+            '1x_bac_en',
+            '1x_bac_kr',
+            'galaxy_ru',
+            'green_ru',
+            '7m_tr_ru',
+            '7m_bac',
+            '7m_td',
+            'neon_ru',
+            'dobrich_ab',
+            'dobrich_tpfo',
+            'dobrich_bac'
+        ];
+        // Function to create and append video tags
+        function createVideoTags() {
+            const container = document.getElementById('video-container');
+
+            for (let stream_index = 0; stream_index < stream_names.length; stream_index++) {
+                // Create a wrapper div for each video and label
+                const videoWrapper = document.createElement('div');
+                videoWrapper.className = 'video-wrapper';
+
+                // Create the label element
+                const label = document.createElement('div');
+                label.className = 'video-label';
+                label.textContent = `${stream_names[stream_index]}`;
+
+                // Create the video element
+                const video = document.createElement('video');
+                video.width = 550;
+                video.controls = false;
+                video.id = `${stream_names[stream_index]}`;
+                video.muted = true;
+                video.autoplay = true;
+
+                video.addEventListener('mouseover', () => {
+                    video.controls = true;
+                    setTimeout(() => {
+                        video.controls = false;
+                    }, 6000);
+                });
+
+                // video.addEventListener('mouseout', () => {
+                // setTimeout(() => {
+                // video.controls = false;
+                // }, 3000);
+                // });
+
+                const closeButton = document.createElement('button');
+                closeButton.className = 'close-button';
+                closeButton.innerHTML = 'X';
+                closeButton.onclick = function () {
+                    container.removeChild(videoWrapper);
+                };
+
+                videoWrapper.appendChild(label);
+                videoWrapper.appendChild(video);
+                videoWrapper.appendChild(closeButton);
+                // Append the wrapper to the container
+                container.appendChild(videoWrapper);
+
+                // Initialize hls.js for the video element
+                if (Hls.isSupported()) {
+                    const hls = new Hls({
+                        liveSyncDuration: 4, // Sync to the live edge within 3 seconds
+                        liveMaxLatencyDuration: 5, // Max latency duration for live streams
+                        maxLiveSyncPlaybackRate: 1.5, // Faster catch-up when behind live edge
+                        enableWorker: true, // Use web worker for better performance
+                        lowLatencyMode: true, // Enable low latency mode
+                        maxBufferLength: 30,
+                        maxMaxBufferLength: 30,
+                        backBufferLength: 30
+                    });
+
+                    hls.loadSource(`/hls/${stream_names[stream_index]}.m3u8`); // Replace with actual M3U8 stream URL
+                    hls.attachMedia(video);
+                    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                        video.play();
+                    });
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = `/hls/${stream_names[stream_index]}.m3u8`; // Replace with actual M3U8 stream URL
+                    video.addEventListener('loadedmetadata', function () {
+                        video.play();
+                    });
+                }
+            }
+        }
+
+        createVideoTags();
+    </script>
 </body>
+
 </html>

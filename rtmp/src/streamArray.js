@@ -1,6 +1,6 @@
 export const stream_names = [
-    'vivo_bac_1',
-    'vivo_bac_2',
+    'vivo_bac',
+    'vivo_ubj',
     'vivo_ru',
     'india_tpfo',
     'india_tp',

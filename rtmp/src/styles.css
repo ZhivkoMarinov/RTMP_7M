@@ -1,0 +1,92 @@
+#rectangle-container {
+    position: relative;
+    margin: 10px auto; /* Center the container with some top/bottom margin */
+    padding: 20px;
+    background-color: #f0f8ff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 80%; /* Optional: Width adjustment */
+    min-height: 100px; /* Prevent shrinking too much */
+    margin-bottom: 30px; /* Space below the container */
+    display: flex; /* Flexbox to align elements in a row */
+    flex-wrap: wrap; /* Wrap elements to the next line if they overflow */
+    justify-content: left; /* Center elements horizontally */
+    gap: 10px; /* Space between the elements */
+}
+
+/* Styling for each rounded rectangle */
+.rectangle-button {
+    width: 85px; /* Half the width */
+    height: 40px; /* Half the height */
+    background-color: #3498db; /* Background color */
+    border-radius: 15px; /* Rounded corners */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 14px; /* Adjusted font size */
+    text-align: center;
+    padding: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+#video-container {
+    position: relative;
+    margin: 0 auto; /* Center the container */
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    /* background-color: #e6ffe6; */
+    z-index: 900;
+    /*width: 80%; /* Optional: Width adjustment */
+    top: 0; /* Start just below the rectangle container */
+}
+
+.video-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding-top: 30px;
+    /* Adjust padding to make room for the label */
+    flex-basis: calc(33.33% - 20px);
+    /* Adjust width to fit 3 per row */
+    box-sizing: border-box;
+}
+
+video {
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.video-label {
+    font-size: 16px;
+    font-weight: bold;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Optional: background color for better readability */
+    padding: 2px 5px;
+}
+
+.close-button {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

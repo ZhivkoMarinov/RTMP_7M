@@ -20,5 +20,7 @@ export const stream_names = [
     'neon_ru',
     'dobrich_ab',
     'dobrich_tpfo',
-    'dobrich_bac'
+    'dobrich_bac',
+    'noir-ru',
+    'imperial-ru'
 ];

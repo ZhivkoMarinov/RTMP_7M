@@ -27,6 +27,6 @@ export function createVideoTag(videoName) {
     videoWrapper.appendChild(label);
     videoWrapper.appendChild(video);
     videoWrapper.appendChild(createCloseButton(container, videoWrapper, videoName));
-    
+
     return videoWrapper;
 }

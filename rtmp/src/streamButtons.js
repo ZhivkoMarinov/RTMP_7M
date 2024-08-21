@@ -1,5 +1,4 @@
 import { createVideoTag } from "./videoTag.js";
-// import { active_stream_array } from "./streamArray.js";
 
 let temp_container = null;
 let active_stream_array = [];
@@ -26,5 +25,4 @@ export function createVideoSelectButtons(streamName, video_container){
 export function updateButtonBar(name, container = temp_container){
     createVideoSelectButtons(name, container);
     active_stream_array = active_stream_array.filter(element => element !== name);
-    console.log(active_stream_array)
 }

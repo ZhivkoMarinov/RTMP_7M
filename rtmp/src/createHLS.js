@@ -1,5 +1,6 @@
 import HlsObject from "./HlsObject.js";
-// create HLS video
+import { active_hls_array } from "./HlsObject.js";
+
 export function createHLS(videoTag, videoName){
     let hls = null;
         if (Hls.isSupported()) {
@@ -10,5 +11,12 @@ export function createHLS(videoTag, videoName){
             videoTag.addEventListener('loadedmetadata', function () {
                 videoTag.play();
         });
+    }
+}
+
+export function stopHLS(name){
+    const hls = active_hls_array.find(element => element.name === name);
+    if(hls instanceof HlsObject){
+        hls.destroy(name);
     }
 }

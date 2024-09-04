@@ -15,9 +15,9 @@ export default class HlsObject {
             maxLiveSyncPlaybackRate: 1.5, // Faster catch-up when behind live edge
             enableWorker: true, // Use web worker for better performance
             lowLatencyMode: true, // Enable low latency mode
-            maxBufferLength: 2,
-            maxMaxBufferLength: 2,
-            backBufferLength: 2
+            maxBufferLength: 8,
+            maxMaxBufferLength: 8,
+            backBufferLength: 8
         });
 
         this.hls.loadSource(`/hls/${this.name}.m3u8`); // Replace with actual M3U8 stream URL
